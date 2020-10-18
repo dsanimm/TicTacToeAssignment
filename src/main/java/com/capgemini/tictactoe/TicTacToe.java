@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class TicTacToe {
 	static Scanner sc = new Scanner(System.in);
 	private static char choice;
+	private static int pos;
 
 	public TicTacToe() {
 		char board[] = new char[11];
@@ -19,17 +20,25 @@ public class TicTacToe {
 		return board;
 	}
 
-	private static void choiceBoard() {
+	private static char[] choiceBoard(char[] board) {
 		System.out.println("Choose X or O");
 		choice = sc.next().charAt(0);
+		System.out.println("Choose position for X or O");
+		pos = sc.nextInt();
+		if (board[pos] == ' ') {
+			board[pos] = choice;
+			return board;
+		} else
+			choiceBoard(board);
+		return board;
 	}
 
 	public static void main(String[] args) {
 		TicTacToe ticTacToe = new TicTacToe();
 		char[] board = ticTacToe.createBoard();
-		ticTacToe.choiceBoard();
 		ticTacToe.printBoard(board);
-
+		board = ticTacToe.choiceBoard(board);
+		ticTacToe.printBoard(board);
 
 	}
 
