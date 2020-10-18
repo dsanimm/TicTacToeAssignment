@@ -12,10 +12,6 @@ public class TicTacToe {
 			board[i] = ' ';
 	}
 
-	public static void main(String[] args) {
-		TicTacToe ticTacToe = new TicTacToe();
-	}
-
 	private static char[] createBoard() {
 		char board[] = new char[11];
 		for (int i = 1; i < 11; i++)
@@ -23,19 +19,28 @@ public class TicTacToe {
 		return board;
 	}
 
-	private static char[] choiceBoard() {
+	private static void choiceBoard() {
 		System.out.println("Choose X or O");
 		choice = sc.next().charAt(0);
 	}
 
 	public static void main(String[] args) {
-		TicTacToe obj = new TicTacToe();
-		char[] board = obj.createBoard();
+		TicTacToe ticTacToe = new TicTacToe();
+		char[] board = ticTacToe.createBoard();
+		ticTacToe.choiceBoard();
+		ticTacToe.printBoard(board);
 
-		System.out.println("Choose position for X or O");
-		int pos = sc.nextInt();
-		board = obj.choiceBoard();
 
+	}
+
+	private static void printBoard(char[] board) {
+		for (int i = 1; i < 10; i++) {
+			System.out.print("[" + board[i] + "]");
+			if (i % 3 == 0) {
+				System.out.println();
+				System.out.println("---------");
+			}
+		}
 	}
 
 }
