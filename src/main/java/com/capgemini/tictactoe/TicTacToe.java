@@ -6,6 +6,8 @@ public class TicTacToe {
 	static Scanner sc = new Scanner(System.in);
 	private static char choice;
 	private static int pos;
+	private static int position;
+	private static int trueHint = 0;
 
 	public TicTacToe() {
 		char board[] = new char[11];
@@ -23,21 +25,30 @@ public class TicTacToe {
 	private static char[] choiceBoard(char[] board, char choice, int pos, int coin) {
 		if (coin == 1)
 			board[pos] = choice;
+		printBoard(board);
 		char compLetter = (choice == 'O') ? 'X' : 'O';
 		int posComputer = (int) (9 * (Math.random())) + 1;
 		while (board[posComputer] != ' ' && !checkDraw(board)) {
 			posComputer = (int) (9 * (Math.random())) + 1;
 		}
-		if (board[posComputer] == ' ') {
+		if (board[posComputer] == ' ' || trueHint != 0) {
 			board[posComputer] = compLetter;
 		}
-		if (coin == 0)
+		if (trueHint != 0)
+			board[trueHint] = compLetter;
+
+		printBoard(board);
+		if ((coin == 0)) {
+			System.out.println("Choose Position");
+			pos = sc.nextInt();
 			board[pos] = choice;
+			printBoard(board);
+		}
 		return board;
 
 	}
 
-	private void printBoard(char[] board) {
+	private static void printBoard(char[] board) {
 		for (int i = 1; i < 10; i++) {
 			System.out.print("[" + board[i] + "]");
 			if (i % 3 == 0) {
@@ -52,12 +63,14 @@ public class TicTacToe {
 			System.out.println("Choose X or O");
 			choice = sc.next().charAt(0);
 		}
-		System.out.println("Choose position");
-		int pos = sc.nextInt();
-		if (board[pos] == ' ')
-			board = TicTacToe.choiceBoard(board, choice, pos, coin);
-		else
-			System.out.println("Wrong Choice");
+		int pos;
+		if (coin == 1) {
+			System.out.println("Choose position");
+			pos = sc.nextInt();
+		} else
+			pos = 0;
+
+		board = TicTacToe.choiceBoard(board, choice, pos, coin);
 		return board;
 	}
 
@@ -65,32 +78,43 @@ public class TicTacToe {
 		for (int a = 0; a < 8; a++) {
 			StringBuilder line = null;
 			StringBuilder winx = new StringBuilder().append(choice).append(choice).append(choice);
+			StringBuilder canWinX = new StringBuilder().append(choice).append(choice);
 			char compLetter = (choice == 'O') ? 'X' : 'O';
+			StringBuilder canWinO = new StringBuilder().append(compLetter).append(compLetter);
 			StringBuilder wino = new StringBuilder().append(compLetter).append(compLetter).append(compLetter);
+			int hint = 0;
 			switch (a) {
 			case 0:
 				line = new StringBuilder().append(board[1]).append(board[2]).append(board[3]);
+				hint = 0;
 				break;
 			case 1:
 				line = new StringBuilder().append(board[4]).append(board[5]).append(board[6]);
+				hint = 1;
 				break;
 			case 2:
 				line = new StringBuilder().append(board[7]).append(board[8]).append(board[9]);
+				hint = 2;
 				break;
 			case 3:
 				line = new StringBuilder().append(board[1]).append(board[4]).append(board[7]);
+				hint = 3;
 				break;
 			case 4:
 				line = new StringBuilder().append(board[2]).append(board[5]).append(board[8]);
+				hint = 4;
 				break;
 			case 5:
 				line = new StringBuilder().append(board[3]).append(board[6]).append(board[9]);
+				hint = 5;
 				break;
 			case 6:
 				line = new StringBuilder().append(board[1]).append(board[5]).append(board[9]);
+				hint = 6;
 				break;
 			case 7:
 				line = new StringBuilder().append(board[3]).append(board[5]).append(board[7]);
+				hint = 7;
 				break;
 			}
 			if (line.toString().equals(winx.toString()) || line.toString().equals(wino.toString())) {
@@ -98,9 +122,24 @@ public class TicTacToe {
 					System.out.println("Player Win");
 				else
 					System.out.println("Computer Win");
-
 				return true;
 			}
+			// System.out.println(line.toString().replaceAll("\\s+", ""));
+			if (line.toString().replaceAll("\\s+", "").equals(canWinO.toString())
+					|| line.toString().replaceAll("\\s+", "").equals(canWinX.toString())) {
+				position = line.lastIndexOf(" ");
+				if (hint == 0 || hint == 1 || hint == 2)
+					trueHint = 3 * hint + position + 1;
+				else if (hint == 3 || hint == 4 || hint == 5)
+					trueHint = 3 * position + hint - 2;
+				else if (hint == 6)
+					trueHint = 1 + 4 * position;
+				else if (hint == 7)
+					trueHint = 3 + 2 * position;
+				//System.out.println("hint" + trueHint);
+
+			}
+
 		}
 		return false;
 	}
@@ -144,13 +183,11 @@ public class TicTacToe {
 
 			choice = 'X';
 			board = ticTacToe.userChoice(board, coinwin);
-			ticTacToe.printBoard(board);
 		}
 
 		while (!checkWin(board) && !checkDraw(board) && coinwin == 0) {
 			choice = 'O';
 			board = ticTacToe.userChoice(board, coinwin);
-			ticTacToe.printBoard(board);
 		}
 		if (checkDraw(board))
 			System.out.println("draw");
