@@ -1,5 +1,7 @@
 package com.capgemini.tictactoe;
 
+import java.util.Arrays;
+import java.util.OptionalInt;
 import java.util.Scanner;
 
 public class TicTacToe {
@@ -28,11 +30,15 @@ public class TicTacToe {
 		printBoard(board);
 		char compLetter = (choice == 'O') ? 'X' : 'O';
 		int posComputer = (int) (9 * (Math.random())) + 1;
-		while (board[posComputer] != ' ' && !checkDraw(board)) {
-			posComputer = (int) (9 * (Math.random())) + 1;
-		}
-		if (board[posComputer] == ' ' || trueHint != 0) {
-			board[posComputer] = compLetter;
+		int cornerPos[] = { 1, 3, 7, 9 };
+		posComputer = Arrays.stream(cornerPos).filter(i -> board[i] == ' ').findFirst().getAsInt();
+		if (posComputer != 1 || posComputer != 3 || posComputer != 7 || posComputer != 9) {
+			while (board[posComputer] != ' ' && !checkDraw(board)) {
+				posComputer = (int) (9 * (Math.random())) + 1;
+			}
+			if (board[posComputer] == ' ' || trueHint != 0) {
+				board[posComputer] = compLetter;
+			}
 		}
 		if (trueHint != 0)
 			board[trueHint] = compLetter;
@@ -136,7 +142,7 @@ public class TicTacToe {
 					trueHint = 1 + 4 * position;
 				else if (hint == 7)
 					trueHint = 3 + 2 * position;
-				//System.out.println("hint" + trueHint);
+				// System.out.println("hint" + trueHint);
 
 			}
 
