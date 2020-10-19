@@ -30,9 +30,9 @@ public class TicTacToe {
 		printBoard(board);
 		char compLetter = (choice == 'O') ? 'X' : 'O';
 		int posComputer = (int) (9 * (Math.random())) + 1;
-		int cornerPos[] = { 1, 3, 7, 9 };
+		int cornerPos[] = { 1, 3, 7, 9, 5 };
 		posComputer = Arrays.stream(cornerPos).filter(i -> board[i] == ' ').findFirst().getAsInt();
-		if (posComputer != 1 || posComputer != 3 || posComputer != 7 || posComputer != 9) {
+		if (posComputer != 1 || posComputer != 3 || posComputer != 7 || posComputer != 9 || posComputer != 5) {
 			while (board[posComputer] != ' ' && !checkDraw(board)) {
 				posComputer = (int) (9 * (Math.random())) + 1;
 			}
