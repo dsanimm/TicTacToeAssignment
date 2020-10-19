@@ -24,7 +24,13 @@ public class TicTacToe {
 		if (coin == 1)
 			board[pos] = choice;
 		char compLetter = (choice == 'O') ? 'X' : 'O';
-		// computer plays here
+		int posComputer = (int) (9 * (Math.random())) + 1;
+		while (board[posComputer] != ' ' && !checkDraw(board)) {
+			posComputer = (int) (9 * (Math.random())) + 1;
+		}
+		if (board[posComputer] == ' ') {
+			board[posComputer] = compLetter;
+		}
 		if (coin == 0)
 			board[pos] = choice;
 		return board;
